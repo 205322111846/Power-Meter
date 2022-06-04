@@ -46,40 +46,23 @@ void setup() {
   #endif
 
   modbus.begin(modbusAddress, modbusSerial, DEREPin);
-
-  delayStart = millis();
-  delayRunning = true;
 }
 
 void loop() {
-//  if(delayRunning && ((millis() - delayStart) >=10000)){
-//    delayRunning = false;
-//  }
-//  else{
-//    delayRunning = true;
-//    
-//    int16_t voltage = 0;
-//    int16_t power = 0;
-//      
-//    voltage = modbus.uint16FromRegister(0x03, 0x00, bigEndian); //tegangan
-//    power = modbus.uint16FromRegister(0x03, 0x08, bigEndian); //daya
-//      
-//    Serial.print("Volt ");
-//    Serial.println((double)voltage*0.1,1);
-//    Serial.print("Power ");
-//    Serial.println((double)power,1);
-//  }
-
   int16_t voltage = 0;
-  int16_t power = 0;
+  int32_t power = 0;
+  int16_t arus = 0;
       
   voltage = modbus.uint16FromRegister(0x03, 0x00, bigEndian); //tegangan
-  power = modbus.uint16FromRegister(0x03, 0x08, bigEndian); //daya
+  power = modbus.uint16FromRegister(0x03, 0x1D, bigEndian); //daya
+  arus = modbus.uint16FromRegister(0x03, 0x03, bigEndian); //arus
       
   Serial.print("Volt ");
   Serial.println((double)voltage*0.1,1);
   Serial.print("Power ");
-  Serial.println((double)power,1);
+  Serial.println((double)power*0.01,2);
+  Serial.print("Current ");
+  Serial.println((double)arus*0.001,3);
 
   delay(10UL * 60UL * 1000UL);
 }
